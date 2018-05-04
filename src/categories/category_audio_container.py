@@ -3,31 +3,16 @@
 class CategoryAudioContainer:
 
     def __init__(self):
-        self.sarcasm_audio = []
-        self.happy_audio = []
-        self.sad_audio = []
-        self.angry_audio = []
+        self.audio = []
+        self.one_hot_encoding_category = []
 
-    def add_sarcasm_audio(self, audio_array):
-        self.sarcasm_audio.append(audio_array)
+    def add_audio(self, audio_array, file_label):
+        if 'positive' in file_label:
+            self.one_hot_encoding_category.append([0,1])
+            self.audio.append(audio_array)
+        elif 'negative' in file_label:
+            self.one_hot_encoding_category.append([1,0])
+            self.audio.append(audio_array)
 
-    def add_happy_audio(self, audio_array):
-        self.happy_audio.append(audio_array)
-
-    def add_sad_audio(self, audio_array):
-        self.sad_audio.append(audio_array)
-
-    def add_angry_audio(self, audio_array):
-        self.angry_audio.append(audio_array)
-
-    def get_sarcasm_audio(self):
-        return self.sarcasm_audio
-
-    def get_happy_audio(self):
-        return self.happy_audio
-
-    def get_sad_audio(self):
-        return self.sad_audio
-
-    def get_angry_audio(self):
-        return self.angry_audio
+    def get_audio_and_encoded_category(self):
+        return self.audio, self.one_hot_encoding_category

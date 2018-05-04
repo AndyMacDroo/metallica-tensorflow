@@ -1,30 +1,27 @@
-import tensorflow as tf
-from audio.wav_file_reader import WavFileReader
-from categories.category_audio_container import CategoryAudioContainer
-import os
+import tflearn as tfl
+from src.audio.batch_reader import collate_audio_in_directory
 
-def collate_audio_in_directory(directory):
-    category_audio_container = CategoryAudioContainer()
-    for file in os.listdir(directory):
-        if file.endswith(".wav"):
-            read_wav_file = WavFileReader(os.path.join(directory, file))
-            if "sarcasm" in file:
-                category_audio_container.add_sarcasm_audio(read_wav_file.get_audio())
-            elif "happy" in file:
-                category_audio_container.add_happy_audio(read_wav_file.get_audio())
-            elif "angry" in file:
-                category_audio_container.add_angry_audio(read_wav_file.get_audio())
-            elif "sad" in file:
-                category_audio_container.add_sad_audio(read_wav_file.get_audio())
-    return category_audio_container
-
-def analyse_audio(category_audio_container):
-    print category_audio_container
-
+# Hyperparameters
+learning_rate = 0.0001
 
 def main():
-    audio_container = collate_audio_in_directory('/home/andrew/Downloads/')
-    analyse_audio(audio_container)
+    batch_audio = collate_audio_in_directory('/home/andrew/Downloads')
+    X, Y = batch_audio.get_audio_and_encoded_category()
+    train_x, train_y = X, Y
+    test_x, test_y = X, Y
+    net = tfl.input_data([None, 20, 80])
+    net = tfl.lstm(net, 128, dropout=0.8)
+    net = tfl.fully_connected(net, 2, activation='softmax')
+    net = tfl.regression(net, optimizer='adam', learning_rate=learning_rate, loss='categorical_crossentropy')
+    training_iters = 300000
+    model = tfl.DNN(net, tensorboard_verbose=0)
+    while training_iters > 0:
+        model.fit(train_x, train_y, n_epoch=2, validation_set=(test_x, test_y), show_metric=True, batch_size=64)
+        _y = model.predict(X)
+        training_iters = training_iters -1
+    model.save('tflearn.lstm.model')
+    print(_y)
+    print(y)
 
 
 if __name__ == "__main__": main()
