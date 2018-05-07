@@ -22,7 +22,7 @@ def split_list(a_list):
 
 
 def main():
-    audio_search_directory = input("Please input a directory where you audio files can be found: ")
+    audio_search_directory = input("Please input a directory where your audio files can be found: ")
     batch_audio = collate_and_convert_audio_in_directory(audio_search_directory, SAMPLE_RATE, AUDIO_MS, AUDIO_CHANNELS)
     X, Y = batch_audio.get_audio_and_encoded_category()
     train_x, test_x = split_list(X)
