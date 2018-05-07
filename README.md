@@ -1,6 +1,6 @@
 ## Building a 'Metallica-Detecting' TensorFlow Neural Network ##
 
-Neural network in TensorFlow to categorise music samples which are 'Metallica' and 'R.E.M'.
+Neural network in TensorFlow to categorise music as either 'Metallica' and 'R.E.M'.
 
 ### Usage
 
